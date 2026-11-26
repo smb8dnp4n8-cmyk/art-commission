@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art Commissions & Waitlist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-parchment: #f4ebd9;
+      --bg-card: #efe2c9;
+      --ink-dark: #2c1e16;
+      --ink-muted: #5c4637;
+      --accent-sepia: #8c5a3c;
+      --border-vintage: #7a5c43;
+    }
+    body {
+      background-color: var(--bg-parchment);
+      color: var(--ink-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-image: 
+        radial-gradient(rgba(139, 90, 43, 0.08) 1px, transparent 0),
+        radial-gradient(rgba(139, 90, 43, 0.05) 1px, transparent 0);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-serif-body {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .vintage-box {
+      background-color: rgba(255, 250, 240, 0.72);
+      border: 2px solid var(--border-vintage);
+      box-shadow: 4px 4px 0px rgba(44, 30, 22, 0.15);
+    }
+    .vintage-dashed {
+      border: 1.5px dashed var(--border-vintage);
+    }
+    .blend-multiply {
+      mix-blend-mode: multiply;
+    }
+    .tier-card.active {
+      background-color: #2c1e16;
+      color: #f4ebd9;
+      border-color: #2c1e16;
+    }
+    .style-btn.active {
+      background-color: #8c5a3c;
+      color: #fffaf0;
+      border-color: #2c1e16;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-6 px-4 sm:px-6">
+
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- Top Bar: Waitlist Counter & Artist Login -->
+    <div class="flex flex-wrap items-center justify-between gap-3 vintage-box px-4 py-3 rounded-sm">
+      <div class="flex items-center gap-2">
+        <span id="status-dot" class="w-3 h-3 rounded-full bg-emerald-700 inline-block"></span>
+        <span class="font-serif-title font-bold text-base sm:text-lg tracking-wide">
+          Waitlist: <span id="slot-count">0</span> / 10 Slots Filled
+        </span>
+      </div>
+      <button onclick="openAdminModal()" class="text-xs uppercase tracking-widest font-semibold px-3 py-1.5 border border-[#7a5c43] hover:bg-[#2c1e16] hover:text-[#f4ebd9] transition">
+        Artist Login
+      </button>
+    </div>
+
+    <!-- Header -->
+    <header class="text-center space-y-2 pt-2">
+      <p class="uppercase tracking-[0.25em] text-xs text-[#5c4637] font-semibold">Open for Robux Commissions</p>
+      <h1 class="font-serif-title text-4xl sm:text-5xl font-bold tracking-tight">Commission Sheet</h1>
+      <p class="font-serif-body italic text-lg sm:text-xl text-[#5c4637]">Vintage Sketches & Colored Character Illustrations</p>
+    </header>
+
+    <!-- Visual Price Chart -->
+    <section class="vintage-box p-4 sm:p-6 rounded-sm">
+      <div class="flex items-center justify-between border-b border-[#7a5c43]/40 pb-2 mb-4">
+        <h2 class="font-serif-title text-xl font-bold">Visual Price Guide</h2>
+        <div class="flex gap-4 text-xs sm:text-sm font-bold uppercase tracking-wider">
+          <span class="px-2 py-0.5 bg-[#efe2c9] border border-[#7a5c43]">Sketch</span>
+          <span class="px-2 py-0.5 bg-[#2c1e16] text-[#f4ebd9]">Colored</span>
+        </div>
+      </div>
+
+      <div class="relative grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Character Reference Image -->
+        <div class="md:col-span-5 flex justify-center relative">
+          <div class="relative w-56 sm:w-64">
+            <img id="chart-image"
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 380'><rect width='240' height='380' fill='%23f4ebd9'/><g stroke='%232c1e16' stroke-width='2.2' fill='none' stroke-linecap='round'><path d='M90,65 C85,35 155,35 150,65 C155,95 148,125 142,135 M90,65 C85,95 92,125 98,135'/><ellipse cx='120' cy='78' rx='22' ry='27'/><path d='M108,75 Q113,72 117,75 M123,75 Q127,72 132,75 M116,90 Q120,93 124,90'/><path d='M112,104 L112,118 M128,104 L128,118'/><path d='M85,130 Q120,118 155,130 L165,195 L145,200 L140,155 L138,225 L102,225 L100,155 L95,200 L75,195 Z'/><path d='M102,225 L92,295 L148,295 L138,225'/><path d='M104,295 L100,365 M118,295 L116,365 M122,295 L124,365 M136,295 L140,365'/></g></svg>"
+              alt="Commission Framing Guide"
+              class="w-full h-auto blend-multiply rounded-sm" />
+          </div>
+        </div>
+
+        <!-- Tier Lines & Prices -->
+        <div class="md:col-span-7 space-y-4">
+          <!-- Headshot -->
+          <div class="border-b-2 border-dashed border-[#7a5c43] pb-2 flex items-center justify-between">
+            <div>
+              <span class="font-serif-title italic text-xl sm:text-2xl font-bold">Headshot</span>
+              <p class="text-xs text-[#5c4637]">Shoulders & up</p>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-5 text-right">
+              <div>
+                <span class="block text-[10px] uppercase text-[#5c4637]">Sketch</span>
+                <span class="font-serif-title font-bold text-xl">20 R$</span>
+              </div>
+              <div class="pl-3 border-l border-[#7a5c43]/40">
+                <span class="block text-[10px] uppercase text-[#8c5a3c] font-bold">Colored</span>
+                <span class="font-serif-title font-bold text-xl text-[#8c5a3c]">50 R$</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bust -->
+          <div class="border-b-2 border-dashed border-[#7a5c43] pb-2 flex items-center justify-between">
+            <div>
+              <span class="font-serif-title italic text-xl sm:text-2xl font-bold">Bust</span>
+              <p class="text-xs text-[#5c4637]">Chest & up</p>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-5 text-right">
+              <div>
+                <span class="block text-[10px] uppercase text-[#5c4637]">Sketch</span>
+                <span class="font-serif-title font-bold text-xl">75 R$</span>
+              </div>
+              <div class="pl-3 border-l border-[#7a5c43]/40">
+                <span class="block text-[10px] uppercase text-[#8c5a3c] font-bold">Colored</span>
+                <span class="font-serif-title font-bold text-xl text-[#8c5a3c]">100 R$</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Half body -->
+          <div class="border-b-2 border-dashed border-[#7a5c43] pb-2 flex items-center justify-between">
+            <div>
+              <span class="font-serif-title italic text-xl sm:text-2xl font-bold">Half body</span>
+              <p class="text-xs text-[#5c4637]">Waist / hips & up</p>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-5 text-right">
+              <div>
+                <span class="block text-[10px] uppercase text-[#5c4637]">Sketch</span>
+                <span class="font-serif-title font-bold text-xl">85 R$</span>
+              </div>
+              <div class="pl-3 border-l border-[#7a5c43]/40">
+                <span class="block text-[10px] uppercase text-[#8c5a3c] font-bold">Colored</span>
+                <span class="font-serif-title font-bold text-xl text-[#8c5a3c]">120 R$</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Knee up -->
+          <div class="border-b-2 border-dashed border-[#7a5c43] pb-2 flex items-center justify-between">
+            <div>
+              <span class="font-serif-title italic text-xl sm:text-2xl font-bold">Knee up</span>
+              <p class="text-xs text-[#5c4637]">From knees & up</p>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-5 text-right">
+              <div>
+                <span class="block text-[10px] uppercase text-[#5c4637]">Sketch</span>
+                <span class="font-serif-title font-bold text-xl">100 R$</span>
+              </div>
+              <div class="pl-3 border-l border-[#7a5c43]/40">
+                <span class="block text-[10px] uppercase text-[#8c5a3c] font-bold">Colored</span>
+                <span class="font-serif-title font-bold text-xl text-[#8c5a3c]">150 R$</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs italic text-[#5c4637] pt-1">* Note: <strong>Full-body: Not Available</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Order Instructions -->
+    <section class="vintage-box p-4 sm:p-5 rounded-sm">
+      <h2 class="font-serif-title text-xl font-bold mb-3 border-b border-[#7a5c43]/40 pb-1.5">How to Order</h2>
+      <ol class="list-decimal list-inside space-y-1.5 text-sm text-[#2c1e16]">
+        <li>Check the <strong>Will Do / Won't Do</strong> rules, price chart (<strong>Sketch</strong> or <strong>Colored</strong>), and available waitlist slots.</li>
+        <li>Enter your <strong>TikTok Username</strong> below (make sure your DMs are open so I can message you!).</li>
+        <li>Choose your framing tier, select <strong>Sketch</strong> or <strong>Colored</strong>, pick optional add-ons, and describe your character clearly.</li>
+        <li>Submit your request to join the waitlist. I will DM you on TikTok within <strong>2–5 days</strong> with a rough sketch—once you approve the sketch, payment will be finalized.</li>
+      </ol>
+    </section>
+
+    <!-- Will Do / Won't Do & Terms -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="vintage-box p-4 rounded-sm">
+        <h3 class="font-serif-title text-lg font-bold text-emerald-900 border-b border-[#7a5c43]/40 pb-1 mb-2">Will Do ✓</h3>
+        <ul class="space-y-1 text-sm">
+          <li>• OC (Original Characters)</li>
+          <li>• Fanart</li>
+          <li>• Men & Women</li>
+          <li>• LGBTQ+</li>
+          <li>• Couple (<strong>+40 Robux</strong>)</li>
+        </ul>
+      </div>
+
+      <div class="vintage-box p-4 rounded-sm">
+        <h3 class="font-serif-title text-lg font-bold text-rose-900 border-b border-[#7a5c43]/40 pb-1 mb-2">Won't Do ✕</h3>
+        <ul class="space-y-1 text-sm">
+          <li>• Full-body</li>
+          <li>• Gore / Heavy Gore</li>
+          <li>• NSFW</li>
+          <li>• Heavy Furry</li>
+          <li>• Pedophile / Proships</li>
+          <li>• Old People</li>
+        </ul>
+      </div>
+
+      <div class="sm:col-span-2 vintage-dashed bg-[#efe2c9]/60 p-4 rounded-sm text-sm space-y-1">
+        <p class="font-serif-title font-bold text-base">Important Terms & Add-ons:</p>
+        <p>• <strong>No refunds.</strong></p>
+        <p>• <strong>Payment approval will be finalized after the sketch is completed.</strong></p>
+        <p>• <strong>Custom Background:</strong> +20 Robux</p>
+      </div>
+    </section>
+
+    <!-- Order Section -->
+    <section id="order-section" class="vintage-box p-5 sm:p-6 rounded-sm">
+      <h2 class="font-serif-title text-2xl font-bold mb-4 border-b border-[#7a5c43]/40 pb-2">Place a Commission Request</h2>
+
+      <!-- Full Waitlist Banner -->
+      <div id="waitlist-full-banner" class="hidden p-5 vintage-dashed bg-rose-950/10 text-center space-y-2">
+        <p class="font-serif-title text-xl font-bold text-rose-950">Waitlist is full! Please check back later!</p>
+        <p class="text-sm text-[#5c4637]">All 10 slots are currently occupied. Slots reopen as soon as current commissions are finished.</p>
+      </div>
+
+      <!-- Interactive Form -->
+      <div id="order-form-container" class="space-y-5">
+        <!-- Step 1: TikTok Verification -->
+        <div class="space-y-2">
+          <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637]">Step 1: Enter Your TikTok Username</label>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="tiktok-input" type="text" placeholder="@yourusername"
+              class="flex-1 px-3.5 py-2.5 bg-[#fffaf0] border border-[#7a5c43] focus:outline-none focus:border-[#2c1e16] text-sm" />
+            <button type="button" onclick="unlockOrderForm()" id="continue-btn"
+              class="px-5 py-2.5 bg-[#2c1e16] text-[#f4ebd9] font-semibold text-sm hover:bg-[#463125] transition">
+              Continue
+            </button>
+          </div>
+          <p id="tiktok-error" class="hidden text-xs text-rose-800 font-medium">Please enter your TikTok username to unlock the order form.</p>
+        </div>
+
+        <!-- Step 2: Unlocked Details -->
+        <form id="commission-form" onsubmit="submitOrder(event)" class="hidden space-y-5 pt-4 border-t border-dashed border-[#7a5c43]">
+          
+          <!-- Select Framing Tier -->
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637] mb-2">Step 2: Choose Framing Tier</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="tier-buttons">
+              <button type="button" onclick="selectTier('Headshot')" data-tier="Headshot"
+                class="tier-card active p-3 border border-[#7a5c43] text-left transition">
+                <span class="block font-serif-title font-bold text-base">Headshot</span>
+                <span class="text-xs opacity-80">20 / 50 R$</span>
+              </button>
+              <button type="button" onclick="selectTier('Bust')" data-tier="Bust"
+                class="tier-card p-3 border border-[#7a5c43] bg-[#fffaf0] text-left transition">
+                <span class="block font-serif-title font-bold text-base">Bust</span>
+                <span class="text-xs opacity-80">75 / 100 R$</span>
+              </button>
+              <button type="button" onclick="selectTier('Half body')" data-tier="Half body"
+                class="tier-card p-3 border border-[#7a5c43] bg-[#fffaf0] text-left transition">
+                <span class="block font-serif-title font-bold text-base">Half body</span>
+                <span class="text-xs opacity-80">85 / 120 R$</span>
+              </button>
+              <button type="button" onclick="selectTier('Knee up')" data-tier="Knee up"
+                class="tier-card p-3 border border-[#7a5c43] bg-[#fffaf0] text-left transition">
+                <span class="block font-serif-title font-bold text-base">Knee up</span>
+                <span class="text-xs opacity-80">100 / 150 R$</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Select Style: Sketch vs Colored -->
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637] mb-2">Select Finish Style</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" onclick="selectStyle('Sketch')" id="style-sketch"
+                class="style-btn active py-2.5 px-4 border border-[#7a5c43] font-semibold text-sm transition">
+                Sketch (<span id="sketch-price-label">20</span> Robux)
+              </button>
+              <button type="button" onclick="selectStyle('Colored')" id="style-colored"
+                class="style-btn py-2.5 px-4 border border-[#7a5c43] bg-[#fffaf0] font-semibold text-sm transition">
+                Colored (<span id="colored-price-label">50</span> Robux)
+              </button>
+            </div>
+          </div>
+
+          <!-- Add-ons -->
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637] mb-2">Optional Add-ons</label>
+            <div class="space-y-2 text-sm">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="addon-couple" onchange="updateTotal()" class="w-4 h-4 accent-[#2c1e16]" />
+                <span>Couple (2 Characters) — <strong>+40 Robux</strong></span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="addon-bg" onchange="updateTotal()" class="w-4 h-4 accent-[#2c1e16]" />
+                <span>Custom Background — <strong>+20 Robux</strong></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Character Description -->
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637] mb-1.5">Character, Pose & Reference Details</label>
+            <textarea id="desc-input" rows="3" required
+              placeholder="Describe your OC/fanart character, outfit, expression, pose, or reference details..."
+              class="w-full p-3 bg-[#fffaf0] border border-[#7a5c43] focus:outline-none focus:border-[#2c1e16] text-sm"></textarea>
+          </div>
+
+          <!-- Payment Timing -->
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-[#5c4637] mb-2">Payment Preference</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm">
+              <label class="flex items-center gap-2 p-3 border border-[#7a5c43] bg-[#fffaf0] cursor-pointer">
+                <input type="radio" name="payment_timing" value="Pay Now" class="accent-[#2c1e16]" />
+                <span>Pay Now</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 border border-[#7a5c43] bg-[#fffaf0] cursor-pointer">
+                <input type="radio" name="payment_timing" value="Pay After Seeing Sketch / Results" checked class="accent-[#2c1e16]" />
+                <span>Pay After Seeing Sketch / Results</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Live Total & Submit -->
+          <div class="pt-3 border-t border-[#7a5c43]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-[#5c4637] block">Estimated Total</span>
+              <span class="font-serif-title text-3xl font-bold"><span id="total-price">20</span> Robux</span>
+            </div>
+            <button type="submit"
+              class="px-6 py-3 bg-[#2c1e16] text-[#f4ebd9] font-serif-title text-lg font-bold tracking-wide hover:bg-[#463125] transition">
+              Join Waitlist
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+    <div class="vintage-box max-w-md w-full p-6 text-center space-y-4">
+      <h3 class="font-serif-title text-2xl font-bold">Request Received!</h3>
+      <p class="text-sm leading-relaxed text-[#2c1e16]">
+        You have been added to the waitlist! Since I will message you on TikTok DM soon, please allow at least <strong>2–5 days</strong>.
+      </p>
+      <button onclick="closeConfirmModal()" class="px-5 py-2 bg-[#2c1e16] text-[#f4ebd9] text-sm font-semibold">
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <!-- Artist Admin Modal -->
+  <div id="admin-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="vintage-box max-w-2xl w-full p-6 space-y-4 my-8">
+      <div class="flex items-center justify-between border-b border-[#7a5c43]/40 pb-2">
+        <h3 class="font-serif-title text-2xl font-bold">Artist Waitlist Dashboard</h3>
+        <button onclick="closeAdminModal()" class="text-sm font-bold px-2 py-1 border border-[#7a5c43]">✕</button>
+      </div>
+
+      <!-- PIN Gate -->
+      <div id="admin-pin-view" class="space-y-3 py-4">
+        <label class="block text-sm font-semibold">Enter Artist PIN (Default: 1234):</label>
+        <div class="flex gap-2">
+          <input id="admin-pin-input" type="password" placeholder="••••"
+            class="px-3 py-2 bg-[#fffaf0] border border-[#7a5c43] text-sm" />
+          <button onclick="verifyAdminPin()" class="px-4 py-2 bg-[#2c1e16] text-[#f4ebd9] text-sm font-semibold">Unlock</button>
+        </div>
+        <p id="pin-error" class="hidden text-xs text-rose-800">Incorrect PIN.</p>
+      </div>
+
+      <!-- Admin Content -->
+      <div id="admin-dashboard-view" class="hidden space-y-5">
+        <!-- Upload Custom Price Chart Illustration -->
+        <div class="p-3 vintage-dashed bg-[#efe2c9]/50 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span><strong>Update Price Chart Character Image:</strong></span>
+          <input type="file" accept="image/*" onchange="uploadChartImage(event)" class="text-xs" />
+        </div>
+
+        <div>
+          <h4 class="font-serif-title font-bold text-lg mb-2">Current Waitlist (<span id="admin-count">0</span>/10)</h4>
+          <div id="admin-orders-list" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MAX_SLOTS = 10;
+    const ARTIST_PIN = '1234';
+    const STORAGE_KEY = 'vintage_art_waitlist_v2';
+    const IMAGE_KEY = 'vintage_art_chart_img_v2';
+
+    const PRICING = {
+      'Headshot': { Sketch: 20, Colored: 50 },
+      'Bust': { Sketch: 75, Colored: 100 },
+      'Half body': { Sketch: 85, Colored: 120 },
+      'Knee up': { Sketch: 100, Colored: 150 }
+    };
+
+    let selectedTier = 'Headshot';
+    let selectedStyle = 'Sketch';
+
+    function getOrders() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveOrders(orders) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+      renderWaitlistState();
+    }
+
+    function renderWaitlistState() {
+      const orders = getOrders();
+      const count = orders.length;
+      document.getElementById('slot-count').textContent = count;
+
+      const dot = document.getElementById('status-dot');
+      const fullBanner = document.getElementById('waitlist-full-banner');
+      const formContainer = document.getElementById('order-form-container');
+
+      if (count >= MAX_SLOTS) {
+        dot.classList.remove('bg-emerald-700');
+        dot.classList.add('bg-rose-700');
+        fullBanner.classList.remove('hidden');
+        formContainer.classList.add('hidden');
+      } else {
+        dot.classList.add('bg-emerald-700');
+        dot.classList.remove('bg-rose-700');
+        fullBanner.classList.add('hidden');
+        formContainer.classList.remove('hidden');
+      }
+    }
+
+    function unlockOrderForm() {
+      const username = document.getElementById('tiktok-input').value.trim();
+      const err = document.getElementById('tiktok-error');
+      if (!username) {
+        err.classList.remove('hidden');
+        return;
+      }
+      err.classList.add('hidden');
+      document.getElementById('commission-form').classList.remove('hidden');
+      document.getElementById('continue-btn').textContent = 'Verified ✓';
+    }
+
+    function selectTier(tier) {
+      selectedTier = tier;
+      document.querySelectorAll('.tier-card').forEach(btn => {
+        if (btn.dataset.tier === tier) {
+          btn.classList.add('active');
+          btn.classList.remove('bg-[#fffaf0]');
+        } else {
+          btn.classList.remove('active');
+          btn.classList.add('bg-[#fffaf0]');
+        }
+      });
+      document.getElementById('sketch-price-label').textContent = PRICING[tier].Sketch;
+      document.getElementById('colored-price-label').textContent = PRICING[tier].Colored;
+      updateTotal();
+    }
+
+    function selectStyle(style) {
+      selectedStyle = style;
+      const sketchBtn = document.getElementById('style-sketch');
+      const coloredBtn = document.getElementById('style-colored');
+      if (style === 'Sketch') {
+        sketchBtn.classList.add('active');
+        sketchBtn.classList.remove('bg-[#fffaf0]');
+        coloredBtn.classList.remove('active');
+        coloredBtn.classList.add('bg-[#fffaf0]');
+      } else {
+        coloredBtn.classList.add('active');
+        coloredBtn.classList.remove('bg-[#fffaf0]');
+        sketchBtn.classList.remove('active');
+        sketchBtn.classList.add('bg-[#fffaf0]');
+      }
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let total = PRICING[selectedTier][selectedStyle];
+      if (document.getElementById('addon-couple').checked) total += 40;
+      if (document.getElementById('addon-bg').checked) total += 20;
+      document.getElementById('total-price').textContent = total;
+      return total;
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      const orders = getOrders();
+      if (orders.length >= MAX_SLOTS) {
+        renderWaitlistState();
+        return;
+      }
+
+      let tiktok = document.getElementById('tiktok-input').value.trim();
+      if (!tiktok.startsWith('@')) tiktok = '@' + tiktok;
+
+      const addons = [];
+      if (document.getElementById('addon-couple').checked) addons.push('Couple (+40 R$)');
+      if (document.getElementById('addon-bg').checked) addons.push('Custom BG (+20 R$)');
+
+      const paymentTiming = document.querySelector('input[name="payment_timing"]:checked').value;
+
+      const newOrder = {
+        id: Date.now(),
+        tiktok,
+        tier: selectedTier,
+        style: selectedStyle,
+        addons: addons.length ? addons.join(', ') : 'None',
+        total: updateTotal(),
+        description: document.getElementById('desc-input').value.trim(),
+        paymentTiming,
+        createdAt: new Date().toLocaleDateString()
+      };
+
+      orders.push(newOrder);
+      saveOrders(orders);
+
+      document.getElementById('commission-form').reset();
+      selectTier('Headshot');
+      selectStyle('Sketch');
+      document.getElementById('confirm-modal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+    }
+
+    function openAdminModal() {
+      document.getElementById('admin-modal').classList.remove('hidden');
+    }
+
+    function closeAdminModal() {
+      document.getElementById('admin-modal').classList.add('hidden');
+    }
+
+    function verifyAdminPin() {
+      const pin = document.getElementById('admin-pin-input').value;
+      if (pin === ARTIST_PIN) {
+        document.getElementById('pin-error').classList.add('hidden');
+        document.getElementById('admin-pin-view').classList.add('hidden');
+        document.getElementById('admin-dashboard-view').classList.remove('hidden');
+        renderAdminOrders();
+      } else {
+        document.getElementById('pin-error').classList.remove('hidden');
+      }
+    }
+
+    function renderAdminOrders() {
+      const orders = getOrders();
+      document.getElementById('admin-count').textContent = orders.length;
+      const list = document.getElementById('admin-orders-list');
+
+      if (orders.length === 0) {
+        list.innerHTML = '<p class="text-sm italic text-[#5c4637]">No clients on the waitlist right now.</p>';
+        return;
+      }
+
+      list.innerHTML = orders.map((order, idx) => `
+        <div class="p-3 border border-[#7a5c43] bg-[#fffaf0] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+          <div class="space-y-1">
+            <p class="font-bold text-base">#${idx + 1} — ${order.tiktok} <span class="text-xs font-normal text-[#5c4637]">(${order.createdAt})</span></p>
+            <p><strong>Order:</strong> ${order.tier} (${order.style}) • <strong>Total:</strong> ${order.total} Robux</p>
+            <p><strong>Add-ons:</strong> ${order.addons} • <strong>Payment:</strong> ${order.paymentTiming}</p>
+            <p class="text-xs bg-[#f4ebd9] p-2 border border-[#7a5c43]/30"><strong>Details:</strong> ${order.description}</p>
+          </div>
+          <button onclick="removeOrder(${order.id})"
+            class="px-3 py-1.5 bg-rose-900 text-[#fffaf0] text-xs font-semibold shrink-0 hover:bg-rose-800">
+            Complete / Remove
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function removeOrder(id) {
+      const updated = getOrders().filter(o => o.id !== id);
+      saveOrders(updated);
+      renderAdminOrders();
+    }
+
+    function uploadChartImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        localStorage.setItem(IMAGE_KEY, e.target.result);
+        document.getElementById('chart-image').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Load saved custom image if any
+    const savedImg = localStorage.getItem(IMAGE_KEY);
+    if (savedImg) {
+      document.getElementById('chart-image').src = savedImg;
+    }
+
+    renderWaitlistState();
+  </script>
+</body>
+</html>
